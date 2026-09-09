@@ -1,177 +1,207 @@
-# Gaussian Naive Bayes From Scratch
+# Naive Bayes Algorithms From Scratch
 
-## 📌 Project Overview
-
-This project focuses on understanding and implementing the Gaussian Naive Bayes classification algorithm from scratch using Python and NumPy.
-
-The main objective of this project is to understand the mathematical intuition and working of Gaussian Naive Bayes instead of simply using a ready-made machine learning implementation.
-
-The from-scratch implementation is also compared with the Scikit-learn implementation to verify the results.
+> A machine learning project implementing the major variants of **Naive Bayes classification from scratch using Python and NumPy**.
 
 ---
 
-## 🎯 Objectives
+## About the Project
 
-- Understand Bayes' theorem and the Naive Bayes assumption.
-- Understand how Gaussian Naive Bayes works with continuous numerical data.
-- Perform Exploratory Data Analysis (EDA).
-- Handle data preprocessing and duplicate records.
-- Implement Gaussian Naive Bayes from scratch using NumPy.
-- Understand mean, variance, prior probability, and likelihood calculations.
-- Evaluate the model using different performance metrics.
-- Compare the from-scratch implementation with Scikit-learn.
-- Analyze model predictions and errors.
+This project implements Naive Bayes variants from scratch (no ready-made classifiers) to understand Bayes' Theorem, conditional probability, priors/likelihoods, the independence assumption, smoothing, prediction, and evaluation.
 
----
+| Algorithm | Dataset | Status |
+|---|---|---|
+| Gaussian Naive Bayes | Wine Quality Red | Completed |
+| Multinomial Naive Bayes | SMS Spam Collection | Completed |
+| Bernoulli Naive Bayes | Text Classification | In Progress (50%) |
 
-## 📊 Dataset
+Each completed implementation is compared with the corresponding **Scikit-learn** version.
 
-### Wine Quality Dataset
-
-The Wine Quality dataset is used for this project.
-
-The dataset contains physicochemical properties of red wine such as:
-
-- Fixed acidity
-- Volatile acidity
-- Citric acid
-- Residual sugar
-- Chlorides
-- Free sulfur dioxide
-- Total sulfur dioxide
-- Density
-- pH
-- Sulphates
-- Alcohol
-
-The original target variable is `quality`, which contains wine quality scores.
-
-For binary classification, the target is converted into two classes:
-
-- **Good** → Quality >= 6
-- **Bad** → Quality < 6
-
-### Dataset Source
-
-UCI Machine Learning Repository
+### Objectives
+Understand the math behind Naive Bayes; implement each variant from scratch; perform EDA and preprocessing; use the correct feature representation per variant; evaluate with standard classification metrics; compare against Scikit-learn; understand hyperparameters, complexity, applications, advantages, and limitations of each variant.
 
 ---
 
-## 🔬 Exploratory Data Analysis
+## Naive Bayes Concept
 
-The following EDA steps are performed:
+Naive Bayes is a probabilistic classifier based on **Bayes' Theorem**:
 
-- Dataset structure analysis
-- Missing value analysis
-- Duplicate detection and removal
-- Target class distribution
-- Numerical feature analysis
-- Outlier analysis
-- Correlation analysis
-- Feature distribution analysis
-- Comparison of features between Good and Bad wines
+\[
+P(C|X)=\frac{P(X|C)P(C)}{P(X)}
+\]
 
-Several visualizations are also used to understand the dataset and identify useful patterns.
+- `P(C|X)` → Posterior, `P(X|C)` → Likelihood, `P(C)` → Prior, `P(X)` → Evidence
 
----
+It assumes features are **conditionally independent given the class**:
 
-## 🧠 Gaussian Naive Bayes
+\[
+P(X|C)=\prod_i P(x_i|C)
+\]
 
-Gaussian Naive Bayes is a classification algorithm that is suitable for continuous numerical features.
+### Variant Comparison
 
-It assumes that the features follow an approximately Gaussian (normal) distribution within each class.
-
-The Gaussian probability density function used is:
-
-P(x|y) = 1 / √(2πσ²) × exp(-(x-μ)² / (2σ²))
-
-Where:
-
-- `μ` = Mean of the feature
-- `σ²` = Variance of the feature
-- `x` = Feature value
-
-The algorithm calculates:
-
-1. Class prior probability
-2. Mean of each feature for each class
-3. Variance of each feature for each class
-4. Feature likelihoods
-5. Overall class score
-6. Final predicted class
+| Algorithm | Feature Type | Representation | Main Use |
+|---|---|---|---|
+| Gaussian NB | Continuous numerical | Mean & variance | Numerical data |
+| Multinomial NB | Counts / frequencies | Word counts | Text classification |
+| Bernoulli NB | Binary / Boolean | Presence or absence | Binary features & text |
 
 ---
 
-## ⚙️ From-Scratch Implementation
+## 1. Gaussian Naive Bayes — Completed
 
-Gaussian Naive Bayes is implemented from scratch using:
+Used for **continuous numerical features**, on the **Wine Quality Red** dataset (11 physicochemical features; quality ≥ 6 → Good, < 6 → Bad).
 
-- Python
-- NumPy
+**Steps:** data cleaning → EDA → train-test split → class priors → class-wise mean/variance → Gaussian PDF → log probability → prediction → evaluation → Scikit-learn comparison.
 
-No ready-made Naive Bayes classifier is used in the from-scratch implementation.
+**Hyperparameter:** `var_smoothing = 1e-9` (adds a small value to variances to avoid numerical issues with near-zero variance).
 
-The implementation includes:
+| Metric | From Scratch | Scikit-learn |
+|---|---:|---:|
+| Accuracy | 72.43% | 72.43% |
+| Precision | 76.34% | 76.34% |
+| Recall | 69.44% | 69.44% |
+| F1 Score | 72.73% | 72.73% |
 
-- `fit()` method for calculating model parameters
-- Gaussian probability density function
-- Log probability calculation
-- `predict()` method for making predictions
-
----
-
-## 📈 Model Evaluation
-
-The model is evaluated using:
-
-- Accuracy
-- Precision
-- Recall
-- F1 Score
-- Confusion Matrix
-
-### From-Scratch Results
-
-| Metric | Score |
-|---|---:|
-| Accuracy | 72.43% |
-| Precision | 76.34% |
-| Recall | 69.44% |
-| F1 Score | 72.73% |
+Identical predictions on all 272 test samples — **100% agreement** with Scikit-learn.
 
 ---
 
-## 🔄 From-Scratch vs Scikit-learn
+## 2. Multinomial Naive Bayes — Completed
 
-The from-scratch implementation is compared with the Gaussian Naive Bayes implementation provided by Scikit-learn.
+Used for **text classification** based on word frequency, on the **SMS Spam Collection** dataset (Ham → 0, Spam → 1).
 
-The comparison includes:
+**Steps:** data cleaning → EDA → text preprocessing (lowercasing, cleanup) → vocabulary & word-index mapping → word-count vectorization → class priors → class-wise word counts → Laplace smoothing → log probability → prediction → evaluation → Scikit-learn comparison.
 
-- Accuracy
-- Precision
-- Recall
-- F1 Score
-- Prediction agreement
+Each message becomes a word-count vector, e.g. `"free free prize"` → `free: 2, prize: 1`.
 
-The from-scratch implementation produced the same predictions as the Scikit-learn implementation on the test dataset.
+**Hyperparameter:** `alpha = 1.0` (Laplace smoothing, prevents zero probability for unseen words):
 
-**Prediction Agreement: 100%**
+\[
+P(w|c)=\frac{count(w,c)+\alpha}{total\ words\ in\ c+\alpha V}
+\]
 
-This confirms that the core implementation is working consistently with the standard library implementation for this dataset and setup.
+| Metric | From Scratch | Scikit-learn |
+|---|---:|---:|
+| Accuracy | 97.97% | 97.97% |
+| Precision | 94.35% | 94.35% |
+| Recall | 89.31% | 89.31% |
+| F1 Score | 91.76% | 91.76% |
+
+Metrics match exactly between the two implementations.
 
 ---
 
-## 📁 Project Structure
+## 3. Bernoulli Naive Bayes — In Progress
+
+Uses **binary features**: whether a word/feature is present (`1`) or absent (`0`), rather than its count. Will also use the SMS Spam Collection dataset.
+
+**Planned steps:** dataset prep → EDA → text preprocessing → binary feature representation → class priors → feature probabilities → Laplace smoothing → training → prediction → evaluation → confusion matrix → Scikit-learn comparison → complexity/hyperparameter analysis.
+
+Results and hyperparameter details will be added once complete.
+
+---
+
+## Model Evaluation
+
+Models are evaluated using **Accuracy, Precision, Recall, F1 Score, and the Confusion Matrix** (TP/TN/FP/FN).
+
+\[
+F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}
+\]
+
+### From-Scratch vs Scikit-learn
+Each variant's manual implementation is compared to Scikit-learn's on predictions, all metrics above, confusion matrix, prediction agreement, and computational complexity — using Scikit-learn as the reference/validation baseline.
+
+---
+
+###  Project Workflow 
+The overall workflow used in the project is: 
+Dataset
+|
+v
+Data Cleaning
+|
+v
+EDA
+|
+v
+Data Preprocessing
+|
+v
+Feature Representation
+|
+v
+Train-Test Split
+|
+v
+Naive Bayes From Scratch
+|
+v
+Prediction
+|
+v
+Evaluation
+|
+v
+Scikit-learn Model
+|
+v
+Comparison
+
+## Applications, Advantages & Limitations
+
+| Variant | Typical Applications |
+|---|---|
+| Gaussian NB | Medical, sensor/measurement, financial, and quality/scientific data classification |
+| Multinomial NB | Spam detection (SMS/email), sentiment analysis, news/document/text categorization |
+| Bernoulli NB | Text classification with binary features, spam & document classification, presence/absence problems |
+
+**Advantages:** simple to understand, fast to train/predict, works well on high-dimensional data, needs relatively little training data, effective for text classification, easy to implement, good intro to probabilistic ML.
+
+**Limitations:** the conditional-independence assumption often doesn't hold in practice; performance drops with strongly dependent features; probability estimates can be poorly calibrated; each variant needs the right feature representation; text models are sensitive to vocabulary/preprocessing choices.
+
+---
+
+## Technologies Used
+
+Python, NumPy (from-scratch implementation), Pandas (data handling), Matplotlib & Seaborn (visualization), Scikit-learn (reference/comparison), Jupyter Notebook, VS Code.
+
+---
+
+## Project Structure
 
 ```text
 naive-bayes-project/
-│
 ├── dataset/
-│   └── winequality-red.csv
-│
+│   ├── winequality-red.csv
+│   └── SMSSpamCollection
 ├── notebooks/
-│   └── naive_bayes_project.ipynb
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
+│   ├── gaussian_nb_project.ipynb
+│   ├── multinomial_nb_project.ipynb
+│   └── bernoulli_nb_project.ipynb
+├── src/
+├── .gitignore
+└── README.md
+```
+
+---
+
+## Project Status
+
+```text
+Gaussian NB       ████████████████████ 100%  Completed
+Multinomial NB    ████████████████████ 100%  Completed
+Bernoulli NB      ██████████░░░░░░░░░░  50%  In Progress
+```
+
+---
+
+## Future Work
+
+Complete the **Bernoulli Naive Bayes** implementation following the same methodology (EDA → preprocessing → binary features → from-scratch model → prediction → evaluation → Scikit-learn comparison → complexity/hyperparameters → applications). Once done, all three variants will be complete, enabling a final comparison of how the choice of Naive Bayes algorithm depends on the data type and feature representation.
+
+---
+
+## Conclusion
+
+This project implements and explains Naive Bayes variants from scratch using Python and NumPy. **Gaussian NB** was completed on the Wine Quality Red dataset; **Multinomial NB** achieved **97.97% accuracy** on SMS Spam Collection, matching Scikit-learn exactly; **Bernoulli NB** is in progress and will complete the set. Overall, the project covers the mathematical foundations, assumptions, implementation, feature representations, evaluation, complexity, hyperparameters, and practical applications of each variant.
