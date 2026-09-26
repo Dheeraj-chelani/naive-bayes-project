@@ -4,40 +4,76 @@
 
 ---
 
-## About the Project
+##  About the Project
 
-This project implements Naive Bayes variants from scratch (no ready-made classifiers) to understand Bayes' Theorem, conditional probability, priors/likelihoods, the independence assumption, smoothing, prediction, and evaluation.
+This project implements the major Naive Bayes variants from scratch without using ready-made classifiers.
 
-| Algorithm | Dataset | Status |
-|---|---|---|
-| Gaussian Naive Bayes | Wine Quality Red | Completed |
-| Multinomial Naive Bayes | SMS Spam Collection | Completed |
-| Bernoulli Naive Bayes | Text Classification | In Progress (50%) |
+The goal is to understand the complete working of Naive Bayes, including:
 
-Each completed implementation is compared with the corresponding **Scikit-learn** version.
+- Bayes' Theorem
+- Conditional probability
+- Class priors and likelihoods
+- Conditional independence assumption
+- Smoothing
+- Prediction
+- Model evaluation
+- Mathematical foundations
+- Comparison with Scikit-learn implementations
 
-### Objectives
-Understand the math behind Naive Bayes; implement each variant from scratch; perform EDA and preprocessing; use the correct feature representation per variant; evaluate with standard classification metrics; compare against Scikit-learn; understand hyperparameters, complexity, applications, advantages, and limitations of each variant.
+Each completed implementation is directly compared with the corresponding **Scikit-learn** version to validate predictions, metrics, and performance.
 
 ---
 
-## Naive Bayes Concept
+##  Objectives
 
-Naive Bayes is a probabilistic classifier based on **Bayes' Theorem**:
+- Understand the mathematics behind Naive Bayes.
+- Implement each major variant from scratch.
+- Perform EDA and data preprocessing.
+- Use the appropriate feature representation for each variant.
+- Calculate class priors and likelihoods manually.
+- Apply smoothing techniques.
+- Evaluate models using standard classification metrics.
+- Compare implementations against Scikit-learn.
+- Understand hyperparameters, complexity, applications, advantages, and limitations.
 
-\[
-P(C|X)=\frac{P(X|C)P(C)}{P(X)}
-\]
+---
 
-- `P(C|X)` → Posterior, `P(X|C)` → Likelihood, `P(C)` → Prior, `P(X)` → Evidence
+##  Project Overview
 
-It assumes features are **conditionally independent given the class**:
+| Algorithm | Dataset | Status |
+|---|---|---|
+| Gaussian Naive Bayes | Wine Quality Red | ✅ Completed |
+| Multinomial Naive Bayes | SMS Spam Collection | ✅ Completed |
+| Bernoulli Naive Bayes | SMS Spam Collection | ✅ Completed |
 
-\[
-P(X|C)=\prod_i P(x_i|C)
-\]
+---
 
-### Variant Comparison
+#  Naive Bayes Concept
+
+Naive Bayes is a probabilistic classification algorithm based on **Bayes' Theorem**:
+
+
+P(A | B) = [P(B | A) × P(A)] / P(B)
+
+
+Where:
+
+| Term | Meaning |
+|---|---|
+| `P(C\|X)` | Posterior probability |
+| `P(X\|C)` | Likelihood |
+| `P(C)` | Prior probability |
+| `P(X)` | Evidence |
+
+### Conditional Independence Assumption
+
+Naive Bayes assumes that features are **conditionally independent given the class**:
+
+P(x_1,...,x_d | y) = Π P(x_i | y)
+
+---
+
+##  Naive Bayes Variants
 
 | Algorithm | Feature Type | Representation | Main Use |
 |---|---|---|---|
@@ -47,13 +83,49 @@ P(X|C)=\prod_i P(x_i|C)
 
 ---
 
-## 1. Gaussian Naive Bayes — Completed
+# 1. Gaussian Naive Bayes
 
-Used for **continuous numerical features**, on the **Wine Quality Red** dataset (11 physicochemical features; quality ≥ 6 → Good, < 6 → Bad).
+**Status:** ✅ Completed
 
-**Steps:** data cleaning → EDA → train-test split → class priors → class-wise mean/variance → Gaussian PDF → log probability → prediction → evaluation → Scikit-learn comparison.
+### Dataset
 
-**Hyperparameter:** `var_smoothing = 1e-9` (adds a small value to variances to avoid numerical issues with near-zero variance).
+**Wine Quality Red**
+
+- 11 physicochemical features
+- Quality `>= 6` → Good
+- Quality `< 6` → Bad
+
+### Workflow
+
+```text
+Data Cleaning
+     ↓
+EDA
+     ↓
+Train-Test Split
+     ↓
+Class Priors
+     ↓
+Class-wise Mean & Variance
+     ↓
+Gaussian PDF
+     ↓
+Log Probability
+     ↓
+Prediction
+     ↓
+Evaluation
+     ↓
+Scikit-learn Comparison
+```
+
+### Hyperparameter
+
+`var_smoothing = 1e-9`
+
+This adds a small value to variances to avoid numerical issues with near-zero variance.
+
+### Results
 
 | Metric | From Scratch | Scikit-learn |
 |---|---:|---:|
@@ -62,23 +134,80 @@ Used for **continuous numerical features**, on the **Wine Quality Red** dataset 
 | Recall | 69.44% | 69.44% |
 | F1 Score | 72.73% | 72.73% |
 
-Identical predictions on all 272 test samples — **100% agreement** with Scikit-learn.
+**Prediction Agreement:** 100% with Scikit-learn.
 
 ---
 
-## 2. Multinomial Naive Bayes — Completed
+# 2. Multinomial Naive Bayes
 
-Used for **text classification** based on word frequency, on the **SMS Spam Collection** dataset (Ham → 0, Spam → 1).
+**Status:** ✅ Completed
 
-**Steps:** data cleaning → EDA → text preprocessing (lowercasing, cleanup) → vocabulary & word-index mapping → word-count vectorization → class priors → class-wise word counts → Laplace smoothing → log probability → prediction → evaluation → Scikit-learn comparison.
+### Dataset
 
-Each message becomes a word-count vector, e.g. `"free free prize"` → `free: 2, prize: 1`.
+**SMS Spam Collection**
 
-**Hyperparameter:** `alpha = 1.0` (Laplace smoothing, prevents zero probability for unseen words):
+- Ham = `0`
+- Spam = `1`
+- Designed for text classification using word frequencies.
 
-\[
-P(w|c)=\frac{count(w,c)+\alpha}{total\ words\ in\ c+\alpha V}
-\]
+### Workflow
+
+```text
+Dataset Preparation
+     ↓
+EDA
+     ↓
+Text Preprocessing
+     ↓
+Vocabulary & Word-Index Mapping
+     ↓
+Word-Count Vectorization
+     ↓
+Class Priors
+     ↓
+Class-wise Word Counts
+     ↓
+Laplace Smoothing
+     ↓
+Log Probability
+     ↓
+Prediction
+     ↓
+Evaluation
+     ↓
+Scikit-learn Comparison
+```
+
+### Feature Representation
+
+Each message is converted into a **word-count vector**.
+
+Example:
+
+```text
+"free free prize"
+```
+
+becomes:
+
+```text
+free  → 2
+prize → 1
+```
+
+### Hyperparameter
+
+`alpha = 1.0`
+
+Laplace smoothing prevents zero probability for unseen words.
+
+$$
+P(w\vert{}c)=
+\frac{count(w,c)+\alpha}
+{total\ words\ in\ c+\alpha V}
+$$
+
+### Results
 
 | Metric | From Scratch | Scikit-learn |
 |---|---:|---:|
@@ -87,121 +216,188 @@ P(w|c)=\frac{count(w,c)+\alpha}{total\ words\ in\ c+\alpha V}
 | Recall | 89.31% | 89.31% |
 | F1 Score | 91.76% | 91.76% |
 
-Metrics match exactly between the two implementations.
+**Metrics:** Match exactly between the two implementations.
 
 ---
 
-## 3. Bernoulli Naive Bayes — In Progress
+# 3. Bernoulli Naive Bayes
 
-Uses **binary features**: whether a word/feature is present (`1`) or absent (`0`), rather than its count. Will also use the SMS Spam Collection dataset.
+**Status:** ✅ Completed
 
-**Planned steps:** dataset prep → EDA → text preprocessing → binary feature representation → class priors → feature probabilities → Laplace smoothing → training → prediction → evaluation → confusion matrix → Scikit-learn comparison → complexity/hyperparameter analysis.
+### Dataset
 
-Results and hyperparameter details will be added once complete.
+**SMS Spam Collection**
 
----
+Bernoulli Naive Bayes uses **binary features**, representing whether a word/feature is present (`1`) or absent (`0`) rather than using its count.
 
-## Model Evaluation
+### Workflow
 
-Models are evaluated using **Accuracy, Precision, Recall, F1 Score, and the Confusion Matrix** (TP/TN/FP/FN).
-
-\[
-F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}
-\]
-
-### From-Scratch vs Scikit-learn
-Each variant's manual implementation is compared to Scikit-learn's on predictions, all metrics above, confusion matrix, prediction agreement, and computational complexity — using Scikit-learn as the reference/validation baseline.
-
----
-
-###  Project Workflow 
-The overall workflow used in the project is: 
-Dataset
-|
-v
-Data Cleaning
-|
-v
+```text
+Dataset Preparation
+     ↓
 EDA
-|
-v
-Data Preprocessing
-|
-v
-Feature Representation
-|
-v
-Train-Test Split
-|
-v
-Naive Bayes From Scratch
-|
-v
+     ↓
+Text Preprocessing
+     ↓
+Binary Feature Representation
+     ↓
+Class Priors
+     ↓
+Feature Probabilities
+     ↓
+Laplace Smoothing
+     ↓
+Training
+     ↓
 Prediction
-|
-v
+     ↓
 Evaluation
-|
-v
-Scikit-learn Model
-|
-v
-Comparison
+     ↓
+Confusion Matrix
+     ↓
+Scikit-learn Comparison
+```
 
-## Applications, Advantages & Limitations
+### Hyperparameter
+
+`alpha = 1.0`
+
+Laplace smoothing is used to avoid zero probabilities.
+
+### Results
+
+| Metric | From Scratch | Scikit-learn |
+|---|---:|---:|
+| Accuracy | 97.97% | 97.97% |
+| Precision | 99.11% | 99.11% |
+| Recall | 84.73% | 84.73% |
+| F1 Score | 91.36% | 91.36% |
+
+**Prediction Agreement:** 100% with the Scikit-learn equivalent.
+
+---
+
+#  Model Evaluation
+
+The models are evaluated using:
+
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- Confusion Matrix
+- TP / TN / FP / FN
+
+### F1 Score
+
+$$
+F1 = 2 \times
+\frac{Precision \times Recall}
+{Precision + Recall}
+$$
+
+---
+
+##  From-Scratch vs Scikit-learn
+
+Each manual implementation is compared with the corresponding Scikit-learn implementation using:
+
+- Predictions
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- Confusion Matrix
+- Prediction agreement
+- Computational complexity
+
+Scikit-learn is used as the **reference/validation baseline**.
+
+---
+
+#  Applications
 
 | Variant | Typical Applications |
 |---|---|
-| Gaussian NB | Medical, sensor/measurement, financial, and quality/scientific data classification |
+| Gaussian NB | Medical, sensor/measurement, financial, quality/scientific data classification |
 | Multinomial NB | Spam detection (SMS/email), sentiment analysis, news/document/text categorization |
 | Bernoulli NB | Text classification with binary features, spam & document classification, presence/absence problems |
 
-**Advantages:** simple to understand, fast to train/predict, works well on high-dimensional data, needs relatively little training data, effective for text classification, easy to implement, good intro to probabilistic ML.
+---
 
-**Limitations:** the conditional-independence assumption often doesn't hold in practice; performance drops with strongly dependent features; probability estimates can be poorly calibrated; each variant needs the right feature representation; text models are sensitive to vocabulary/preprocessing choices.
+#  Advantages
+
+- Simple to understand
+- Fast to train and predict
+- Works well on high-dimensional data
+- Requires relatively little training data
+- Effective for text classification
+- Easy to implement
+- Good introduction to probabilistic machine learning
 
 ---
 
-## Technologies Used
+#  Limitations
 
-Python, NumPy (from-scratch implementation), Pandas (data handling), Matplotlib & Seaborn (visualization), Scikit-learn (reference/comparison), Jupyter Notebook, VS Code.
+- The conditional-independence assumption often does not hold in practice.
+- Performance can drop when features are strongly dependent.
+- Probability estimates can be poorly calibrated.
+- Each Naive Bayes variant requires the appropriate feature representation.
+- Text models can be sensitive to vocabulary and preprocessing choices.
 
 ---
 
-## Project Structure
+#  Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| **Python** | Programming language |
+| **NumPy** | From-scratch mathematical implementation |
+| **Pandas** | Data handling |
+| **Matplotlib** | Visualization |
+| **Seaborn** | Visualization |
+| **Scikit-learn** | Reference and comparison |
+| **Jupyter Notebook** | Development and experimentation |
+
+---
+
+#  Project Structure
 
 ```text
 naive-bayes-project/
+│
 ├── dataset/
 │   ├── winequality-red.csv
 │   └── SMSSpamCollection
+│
 ├── notebooks/
 │   ├── gaussian_nb_project.ipynb
 │   ├── multinomial_nb_project.ipynb
 │   └── bernoulli_nb_project.ipynb
-├── src/
+│
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Project Status
+#  Project Status
 
-```text
-Gaussian NB       ████████████████████ 100%  Completed
-Multinomial NB    ████████████████████ 100%  Completed
-Bernoulli NB      ██████████░░░░░░░░░░  50%  In Progress
-```
-
----
-
-## Future Work
-
-Complete the **Bernoulli Naive Bayes** implementation following the same methodology (EDA → preprocessing → binary features → from-scratch model → prediction → evaluation → Scikit-learn comparison → complexity/hyperparameters → applications). Once done, all three variants will be complete, enabling a final comparison of how the choice of Naive Bayes algorithm depends on the data type and feature representation.
+| Model | Completion |
+|---|---:|
+| Gaussian Naive Bayes | ✅ 100% |
+| Multinomial Naive Bayes | ✅ 100% |
+| Bernoulli Naive Bayes | ✅ 100% |
 
 ---
 
-## Conclusion
+#  Conclusion
 
-This project implements and explains Naive Bayes variants from scratch using Python and NumPy. **Gaussian NB** was completed on the Wine Quality Red dataset; **Multinomial NB** achieved **97.97% accuracy** on SMS Spam Collection, matching Scikit-learn exactly; **Bernoulli NB** is in progress and will complete the set. Overall, the project covers the mathematical foundations, assumptions, implementation, feature representations, evaluation, complexity, hyperparameters, and practical applications of each variant.
+This project implements and explains major Naive Bayes variants from scratch using **Python and NumPy**.
+
+- **Gaussian Naive Bayes** was successfully implemented for the Wine Quality Red dataset.
+- **Multinomial Naive Bayes** and **Bernoulli Naive Bayes** achieved approximately **98% accuracy** on the SMS Spam Collection dataset.
+- The from-scratch implementations produced results matching their corresponding Scikit-learn implementations.
+- The project covers the mathematical foundations, assumptions, implementation details, feature representations, evaluation metrics, complexity, hyperparameters, applications, advantages, and limitations of each variant.
+
+Overall, the project provides a practical understanding of how Naive Bayes classifiers work internally rather than relying only on library implementations.
